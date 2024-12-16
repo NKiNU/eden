@@ -1094,11 +1094,11 @@ Thank you"""
         userfield = settings.login_userfield
         if userfield == "email":
             utable.email.requires = [
+                IS_NOT_EMPTY(error_message=messages.invalid_email),
                 IS_EMAIL(error_message=messages.invalid_email),
-                IS_IN_DB(self.db, utable.email,
-                         error_message = messages.invalid_email,
-                         ),
-                ]
+                IS_IN_DB(self.db, utable.email, error_message=messages.invalid_email),
+            ]
+
         else:
             utable[userfield].requires = [
                 IS_IN_DB(self.db, utable[userfield],
@@ -1124,17 +1124,23 @@ Thank you"""
                         onvalidation = onvalidation,
                         hideerror = settings.hideerror,
                         ):
-            user = utable(**{userfield:form.vars.get(userfield)})
+            try:
+                 user = utable(**{userfield: form.vars.get(userfield)})
+            except Exception as e:
+                session.error = messages.invalid_user
+                current.log.error(f"Password reset query failed: {e}")
+                redirect(self.url(args=request.args), client_side=settings.client_side)
+
             if not user:
                 session.error = messages["invalid_%s" % userfield]
                 redirect(self.url(args = request.args),
                          client_side = settings.client_side)
-            elif user.registration_key in ("pending", "disabled", "blocked"):
+            elif user.registration_key and user.registration_key not in ("", None):
                 session.warning = messages.registration_pending
-                redirect(self.url(args=request.args),
-                         client_side=settings.client_side)
-            if self.email_reset_password(user):
-                session.confirmation = messages.email_sent
+                redirect(self.url(args=request.args), client_side=settings.client_side)
+            if not self.email_reset_password(user):
+                session.error = messages.unable_to_send_email
+                current.log.error(f"Failed to send reset password email to: {user.email}")
             else:
                 session.error = messages.unable_to_send_email
             self.log_event(log, user)
@@ -1144,7 +1150,6 @@ Thank you"""
             else:
                 next = replace_id(next, form)
             redirect(next, client_side=settings.client_side)
-        # old_requires = utable.email.requires
         return form
 
     # -------------------------------------------------------------------------
