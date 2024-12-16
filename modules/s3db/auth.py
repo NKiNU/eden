@@ -871,8 +871,7 @@ class auth_Consent:
         s3db = current.s3db
         request = current.request
 
-        today = timestmp.date() if timestmp else request.utcnow.date()
-        vsign = request.env.remote_addr
+        today = timestmp.date() if timestmp else datetime.date.today()
 
         # Parse the value
         parsed = cls.parse(value)
@@ -891,14 +890,15 @@ class auth_Consent:
             query &= (otable.obsolete == False)
         rows = db(query).select(join=join, *fields)
 
-        valid_options = {}
-        for row in rows:
-            option = row.auth_consent_option
-            context = [(fn, option[fn]) for fn in auth_consent_option_hash_fields]
-            valid_options[option.id] = {"code": row.auth_processing_type.code,
-                                        "hash": cls.get_hash(context),
-                                        "valid_for": option.validity_period,
-                                        }
+        valid_options = {row.auth_consent_option.id: {
+                    "code": row.auth_processing_type.code,
+                    "hash": cls.get_hash([
+                        (fn, row.auth_consent_option[fn])
+                        for fn in auth_consent_option_hash_fields
+                    ]),
+                    "valid_for": row.auth_consent_option.validity_period,
+                 }
+                 for row in rows}
 
         ctable = s3db.auth_consent
         record_ids = []
@@ -911,13 +911,14 @@ class auth_Consent:
             if not option or option["code"] != code:
                 raise ValueError("Invalid consent option: %s#%s" % (code, option_id))
 
-            consent = (("date", today.isoformat()),
-                       ("option_id", option_id),
-                       ("person_id", person_id),
-                       ("vsign", vsign),
-                       ("consenting", consenting),
-                       ("ohash", option["hash"]),
-                       )
+            consent = {
+                "date": today,
+                 "option_id": option_id,
+                 "person_id": person_id,
+                "consenting": consenting,
+                "ohash": option["hash"],
+            }
+
 
             # Store the hash for future verification
             consent = dict(consent[:5])
@@ -928,6 +929,9 @@ class auth_Consent:
             valid_for = option["valid_for"]
             if valid_for:
                 consent["expires_on"] = today + datetime.timedelta(days=valid_for)
+            else:
+                consent["expires_on"] = None
+
 
             # Create new consent record
             record_id = ctable.insert(**consent)
