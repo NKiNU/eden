@@ -347,7 +347,8 @@ def sites_for_org():
             result = rows.json()
     finally:
         response.headers["Content-Type"] = "application/json"
-        return result
+        
+    return result
 
 # -----------------------------------------------------------------------------
 def person():
