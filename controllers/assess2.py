@@ -2411,7 +2411,7 @@ def custom_assess(custom_assess_fields, location_id=None):
             label = "%s:" % T(org_subsector_represent(field[1]))
             widget = db.assess_summary.value.widget(db.assess_summary.value,
                                                     0, _name = name)
-            widget = color_code_severity_widget(widget)
+            widget = color_code_severity_widget(widget,name)
 
         # Add the field components to the form_rows
         if field[0] == "title":
