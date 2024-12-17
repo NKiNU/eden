@@ -3245,6 +3245,23 @@ class IS_ISO639_2_LANGUAGE_CODE(IS_IN_SET):
         return list(set(lang)) # Remove duplicates
 
 # =============================================================================
+<<<<<<< HEAD
+=======
+
+VALID_IBAN_COUNTRIES = {
+    "AD", "AE", "AL", "AT", "AZ", "BA", "BE", "BG", "BH",
+    "BR", "CH", "CR", "CY", "CZ", "DE", "DK", "DO", "EE",
+    "ES", "FI", "FO", "FR", "GB", "GE", "GI", "GL", "GR",
+    "GT", "HR", "HU", "IE", "IL", "IS", "IT", "JO", "KW",
+    "KZ", "LB", "LC", "LI", "LT", "LU", "LV", "MC", "MD",
+    "ME", "MK", "MR", "MT", "MU", "NL", "NO", "PK", "PL",
+    "PS", "PT", "QA", "RO", "RS", "SA", "SC", "SE", "SI",
+    "SK", "SM", "ST", "TL", "TN", "TR", "UA", "VG", "XK",
+}
+
+IBAN_PATTERN = re.compile(r"^([A-Z]{2})(\d{2})([A-Z0-9]{1,30})$")
+
+>>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
 class IS_IBAN(Validator):
     """ Validate IBAN International Bank Account Numbers (ISO 13616:2007) """
 
@@ -3308,5 +3325,53 @@ class IS_IBAN(Validator):
         if not value:
             return "-"
         return " ".join(re.findall(r"\w{1,4}", value.strip().replace(" ", "").upper()))
+<<<<<<< HEAD
+=======
+
+
+def get_supported_languages():
+    """ 
+    Retrieve the list of supported languages from deployment settings.
+
+    Returns:
+        list: A list of supported language codes and their names.
+    """
+    settings = current.deployment_settings
+
+    # Base language codes
+    base_languages = [
+        ("en", "English"),
+        ("es", "Spanish"),
+        ("fr", "French"),
+        # Add other default languages here
+    ]
+
+    # Extend with deployment-specific languages
+    additional_languages = settings.get_L10n_languages()
+    if additional_languages:
+        base_languages += list(additional_languages.items())
+
+    # Include extra codes from settings
+    extra_codes = settings.get_L10n_extra_codes()
+    if extra_codes:
+        base_languages += extra_codes
+
+    # Remove duplicates while preserving order
+    return list(dict.fromkeys(base_languages))
+
+
+def is_valid_language(language_code):
+    """ 
+    Validate if a language code is supported.
+
+    Args:
+        language_code (str): The language code to validate.
+
+    Returns:
+        bool: True if the language code is valid, False otherwise.
+    """
+    supported_languages = [lang[0] for lang in get_supported_languages()]
+    return language_code in supported_languages
+>>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
 
 # END =========================================================================
