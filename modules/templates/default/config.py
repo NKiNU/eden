@@ -234,7 +234,8 @@ def config(settings):
     # http://www.loc.gov/standards/iso639-2/php/code_list.php
     settings.L10n.languages = OrderedDict([
         ("ar", "Arabic"),
-        ("bs", "Bosnian"),
+        ("bs", "Bosanski"),
+        
         ##("crs", "Seychellois Creole"),
         ##("dv", "Divehi"), # Maldives
         ##("dz", "Dzongkha"), # Bhutan
@@ -256,7 +257,7 @@ def config(settings):
         ("mn", "Mongolian"),
         ##("ms", "Malaysian"),
         ("my", "Burmese"), # Myanmar
-        ("ne", "Nepali"),
+        ("ne", "Nepal"),
         ("pl", "Polish"),
         ("prs", "Dari"), # Afghan Persian
         ("ps", "Pashto"), # Afghanistan, Pakistan
@@ -273,8 +274,10 @@ def config(settings):
         ("ua", "Ukrainian"),
         #("ur", "Urdu"), # Pakistan
         ("vi", "Vietnamese"),
+        ("ms", "Malay"),
         #("zh-cn", "Chinese (Simplified)"), # Mainland China
         #("zh-tw", "Chinese (Taiwan)"),
+        
     ])
     # Default language for Language Toolbar (& GIS Locations in future)
     #settings.L10n.default_language = "en"

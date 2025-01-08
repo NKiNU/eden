@@ -126,6 +126,7 @@
 "Approve": "Onayla",
 "Approver": "Onaylayan",
 "Arabic": "Arapça",
+"Malat":"Melayu",
 "Archive": "Arşiv",
 "Are you sure you want to delete this record?": "Bu kaydı silmek istediğinizden emin misiniz?",
 "Arrival Date": "Turkiye'ye geliş tarihi",
