@@ -33,6 +33,10 @@ __all__ = ("S3MainMenu",
 
 import re
 
+# The above code is importing the `current` and `URL` modules from the `gluon` package in Python. The
+# `current` module is typically used in web development frameworks like web2py to access request,
+# response, session, and other web-related information. The `URL` module is used to generate URLs for
+# links and redirects in web applications.
 from gluon import current, URL
 from gluon.storage import Storage
 
@@ -134,6 +138,15 @@ class S3MainMenu(object):
     # -------------------------------------------------------------------------
     @classmethod
     def menu_lang(cls, **attr):
+        """
+        Generate a language selection menu.
+        This method creates a language menu for the application, allowing users to select their preferred language.
+        The menu is only displayed if the deployment settings allow for a language toolbar.
+        Args:
+            **attr: Additional HTML attributes for the menu.
+        Returns:
+            A menu object containing language options, or None if the language toolbar is not enabled.
+        """
         """ Language menu """
 
         settings = current.deployment_settings

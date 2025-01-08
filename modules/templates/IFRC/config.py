@@ -329,6 +329,7 @@ def config(settings):
         ("ps", "Pashto"), # Afghanistan, Pakistan
         ("th", "Thai"),
         ("vi", "Vietnamese"),
+        ("ms", "Malay"),
         ("zh-cn", "Chinese (Simplified)"), # Mainland
     ])
     # Default Language

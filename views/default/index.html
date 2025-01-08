@@ -1,53 +1,247 @@
 {{extend "layout.html"}}
-<div id='home'>
- {{try:}}
- <div class='row' id='homepage-title'>
-  <h2 align='center'>{{=title}}</h2>
- </div>
- {{except:}}{{pass}}
- <div class='row' id='homepage-cms'>
-  {{=XML(item)}}
- </div>
- <div class='row' id='homepage-main'>
-  <div class='small-12 medium-12 large-push-6 large-5 columns'>
-   {{if auth.get_system_roles().AUTHENTICATED not in session.s3.roles:}}
-   <div id='login_box'>
-    <div id='login_form' {{if self_registration and not registered and not login_form.errors:}}class='hide'{{pass}}>
-     {{=login_div}}
-     {{include "auth/_login.html"}}
-    </div>
-    {{if self_registration:}}
-    <div id='register_form' {{if registered or login_form.errors:}}class='hide'{{pass}}>
-     {{=register_div}}
-     {{include "auth/_register.html"}}
-    </div>
-    {{pass}}
-   </div>
-   {{pass}}
-   {{=manage_facility_box}}
-   {{=org_box}}
+<div id="home">
+  {{try:}}
+  <div class="row" id="homepage-title">
+    <h1 class="page-title">{{=title}}</h1>
   </div>
-  <div class='hide-for-small medium-12 large-pull-6 large-6 columns' id='homepage-menus'>
-   <div class="row">
-    <div class="medium-centered medium-11 columns">
-     {{try:}}{{=sit_menu}}{{except:}}{{pass}}
-     {{try:}}{{=org_menu}}{{except:}}{{pass}}
-     {{try:}}{{=res_menu}}{{except:}}{{pass}}
-     {{try:}}{{=aid_menu}}{{except:}}{{pass}}
-    </div>
-   </div>
+  {{except:}}{{pass}}
+
+  <div class="row" id="homepage-cms">
+    {{=XML(item)}}
   </div>
- </div>
+
+  <div class="row" id="homepage-main">
+    <div class="small-12 medium-6 large-5 columns">
+      {{if auth.get_system_roles().AUTHENTICATED not in session.s3.roles:}}
+      <div id="login_box" class="card">
+        <div id="login_form" class="login-form {{if self_registration and not registered and not login_form.errors:}}hide{{pass}}">
+          {{=login_div}}
+          <h3>Login</h3>
+          {{include "auth/_login.html"}}
+        </div>
+
+        {{if self_registration:}}
+        <div id="register_form" class="register-form {{if registered or login_form.errors:}}hide{{pass}}">
+          {{=register_div}}
+          <h3>Register</h3>
+          {{include "auth/_register.html"}}
+        </div>
+        {{pass}}
+      </div>
+      {{pass}}
+      {{=manage_facility_box}}
+      {{=org_box}}
+    </div>
+
+    <div class="small-12 medium-6 large-7 columns">
+      <div id="homepage-menus" class="card">
+        <div class="row">
+          <div class="medium-centered medium-11 columns">
+            {{try:}}{{=sit_menu}}{{except:}}{{pass}}
+            {{try:}}{{=org_menu}}{{except:}}{{pass}}
+            {{try:}}{{=res_menu}}{{except:}}{{pass}}
+            {{try:}}{{=aid_menu}}{{except:}}{{pass}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div id='about'>
- <div class='row'>
-  <div class='small-12 columns'>
-   <p>
-    {{=T("For more details on the Sahana Eden system, see the")}} <a href="http://eden.sahanafoundation.org" target="_blank">{{=T("Sahana Eden Website")}}</a>
-    <br/>
-    {{=T("For live help from the Sahana community on using this application, go to")}} <a href="http://eden.sahanafoundation.org/wiki/Chat" target="_blank">{{=T("Sahana Community Chat")}}</a>
-   </p>
+
+<div id="about">
+  <div class="row">
+    <div class="small-12 columns">
+      <p>
+        {{=T("For more details on the Sahana Eden system, see the")}} 
+        <a href="http://eden.sahanafoundation.org" target="_blank" class="about-link">{{=T("Sahana Eden Website")}}</a>
+        <br/>
+        {{=T("For live help from the Sahana community on using this application, go to")}} 
+        <a href="http://eden.sahanafoundation.org/wiki/Chat" target="_blank" class="about-link">{{=T("Sahana Community Chat")}}</a>
+      </p>
+    </div>
   </div>
- </div>
 </div>
+
 {{if org_box:}}{{include "dataTables.html"}}{{pass}}
+
+<!-- CSS Styles (Modern, Material Design Inspired) -->
+<style>
+  /* General Font and Layout */
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+
+  /* Hide all cards except for login or registration form when on login page */
+  body.login-page .card:not(#login_box) {
+    display: none;
+  }
+
+  /* Page Title */
+  .page-title {
+    font-size: 2.4rem; /* Slightly smaller for more hierarchy */
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px; /* Consistent spacing */
+    text-align: center;
+  }
+
+  /* Buttons Styling (Material Design) */
+  .material-btn {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .material-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .material-btn i {
+    font-size: 1.6rem;
+  }
+
+  /* Button Container */
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  /* Card Design */
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Forms Styling */
+  #login_form, #register_form {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+
+  h3 {
+    font-size: 1.6rem;
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* About Section */
+  #about {
+    background-color: #ecf0f1;
+    padding: 30px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  #about p {
+    font-size: 1.2rem;
+    color: #34495e;
+  }
+
+  .about-link {
+    color: #3498db;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+
+  .about-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Material Icons */
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .material-btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+    }
+
+    #homepage-main .columns {
+      margin-top: 20px;
+    }
+
+    #about {
+      padding: 30px 15px;
+    }
+  }
+
+  /* Additional Mobile Responsiveness */
+  @media (max-width: 480px) {
+    #homepage-title h1 {
+      font-size: 1.6rem;
+    }
+
+    #about p {
+      font-size: 1rem;
+    }
+
+    .material-btn {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+  }
+</style>
+
+<!-- JavaScript to Add the login-page Class Dynamically -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login_form');
+    const registerForm = document.getElementById('register_form');
+    const body = document.body;
+
+    function setLoginPageClass() {
+      if (loginForm && loginForm.style.display !== 'none') {
+        body.classList.add('login-page');
+      } else if (registerForm && registerForm.style.display !== 'none') {
+        body.classList.add('login-page');
+      } else {
+        body.classList.remove('login-page');
+      }
+    }
+
+    // Set class on initial load
+    setLoginPageClass();
+
+    // Monitor visibility of login and register forms
+    if (loginForm) {
+      loginForm.addEventListener('change', setLoginPageClass);
+    }
+    if (registerForm) {
+      registerForm.addEventListener('change', setLoginPageClass);
+    }
+  });
+</script>

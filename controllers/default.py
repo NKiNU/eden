@@ -108,7 +108,7 @@ def index():
         HM("Alerts", c="cap", f="alert", icon="alert"),
         HM("Assessments", c="survey", f="series", icon="assessment"),
     )
-    org_menu = HM("Who is doing What and Where")(
+    org_menu = HM("Who is doing What and Where?")(
         HM("Organizations", c="org", f="organisation", icon="organisation"),
         HM("Facilities", c="org", f="facility", icon="facility"),
         HM("Activities", c="project", f="activity", icon="activity"),
@@ -152,6 +152,7 @@ def index():
     if AUTHENTICATED in roles and has_permission("read", table):
 
         org_items = organisation()
+        
         datatable_ajax_source = "/%s/default/organisation.aadata" % appname
 
         # List of Organisations
@@ -875,8 +876,12 @@ def organisation():
     if representation == "html":
         from s3 import s3_request
         r = s3_request("org", "organisation")
-        s3_action_buttons(r)
-        s3.no_formats = True
+        controller = "org"
+        function = "organisation"
+        read_url = URL(c=controller, f=function,args = ["[id]"],)
+        update_url = URL(c=controller, f=function,args = ["[id]", "update"],)
+        s3_action_buttons(r, read_url = read_url,update_url = update_url)
+        s3.no_formats = False
         items = dt.html(totalrows,
                         totalrows,
                         "org_dt",
@@ -900,6 +905,8 @@ def organisation():
     else:
         from gluon.http import HTTP
         raise HTTP(415, ERROR.BAD_FORMAT)
+    
+    
 
     return items
 

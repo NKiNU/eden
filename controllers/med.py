@@ -49,315 +49,147 @@ def hospital():
 
     # Pre-processor
     def prep(r):
-        # Function to call for all Site Instance Types
         from s3db.org import org_site_prep
         org_site_prep(r)
 
         if r.interactive:
             if r.component:
-                cname = r.component_name
-                if cname == "status":
-                    table = db.med_hospital_status
-                    table.facility_status.comment = DIV(_class = "tooltip",
-                                                        _title = "%s|%s" % (T("Facility Status"),
-                                                                            T("Status of the facility."),
-                                                                            ),
-                                                        )
-                    table.facility_operations.comment = DIV(_class = "tooltip",
-                                                            _title = "%s|%s" % (T("Facility Operations"),
-                                                                                T("Overall status of the facility operations."),
-                                                                                ),
-                                                            )
-                    table.clinical_status.comment = DIV(_class = "tooltip",
-                                                        _title = "%s|%s" % (T("Clinical Status"),
-                                                                            T("Status of the clinical departments."),
-                                                                            ),
-                                                        )
-                    table.clinical_operations.comment = DIV(_class = "tooltip",
-                                                            _title = "%s|%s" % (T("Clinical Operations"),
-                                                                                T("Overall status of the clinical operations."),
-                                                                                ),
-                                                            )
-                    table.ems_status.comment = DIV(_class = "tooltip",
-                                                   _title = "%s|%s" % (T("Emergency Medical Services"),
-                                                                       T("Status of operations/availability of emergency medical services at this facility."),
-                                                                       ),
-                                                   )
-                    table.ems_reason.comment = DIV(_class = "tooltip",
-                                                   _title = "%s|%s" % (T("EMS Status Reasons"),
-                                                                       T("Report the contributing factors for the current EMS status."),
-                                                                       ),
-                                                   )
-                    table.or_status.comment = DIV(_class = "tooltip",
-                                                  _title = "%s|%s" % (T("OR Status"),
-                                                                      T("Status of the operating rooms of this facility."),
-                                                                      ),
-                                                  )
-                    table.or_reason.comment = DIV(_class = "tooltip",
-                                                  _title = "%s|%s" % (T("OR Status Reason"),
-                                                                      T("Report the contributing factors for the current OR status."),
-                                                                      ),
-                                                  )
-                    table.morgue_status.comment = DIV(_class = "tooltip",
-                                                      _title = "%s|%s" % (T("Morgue Status"),
-                                                                          T("Status of morgue capacity."),
-                                                                          ),
-                                                      )
-                    table.morgue_units.comment = DIV(_class = "tooltip",
-                                                     _title = "%s|%s" % (T("Morgue Units Available"),
-                                                                         T("Number of vacant/available units to which victims can be transported immediately."),
-                                                                         ),
-                                                     )
-                    table.security_status.comment = DIV(_class = "tooltip",
-                                                        _title = "%s|%s" % (T("Security Status"),
-                                                                            T("Status of security procedures/access restrictions for the facility."),
-                                                                            ),
-                                                        )
-                    table.staffing.comment = DIV(_class = "tooltip",
-                                                 _title = "%s|%s" % (T("Staffing Level"),
-                                                                     T("Current staffing level at the facility."),
-                                                                     ),
-                                                 )
-                    table.access_status.comment = DIV(_class = "tooltip",
-                                                      _title = "%s|%s" % (T("Road Conditions"),
-                                                                          T("Describe the condition of the roads from/to the facility."),
-                                                                          ),
-                                                      )
-
-                elif cname == "bed_capacity":
-                    table = db.med_bed_capacity
-                    table.bed_type.comment = DIV(_class = "tooltip",
-                                                 _title = "%s|%s" % (T("Bed Type"),
-                                                                     T("Specify the bed type of this unit."),
-                                                                     ),
-                                                 )
-                    table.beds_baseline.comment = DIV(_class = "tooltip",
-                                                      _title = "%s|%s" % (T("Baseline Number of Beds"),
-                                                                          T("Baseline number of beds of that type in this unit."),
-                                                                          ),
-                                                      )
-                    table.beds_available.comment = DIV(_class = "tooltip",
-                                                       _title = "%s|%s" % (T("Available Beds"),
-                                                                           T("Number of available/vacant beds of that type in this unit at the time of reporting."),
-                                                                           ),
-                                                       )
-                    table.beds_add24.comment = DIV(_class = "tooltip",
-                                                   _title = "%s|%s" % (T("Additional Beds / 24hrs"),
-                                                                       T("Number of additional beds of that type expected to become available in this unit within the next 24 hours."),
-                                                                       ),
-                                                   )
-                elif cname == "activity":
-                    table = db.med_hospital_activity
-                    table.date.comment = DIV(_class = "tooltip",
-                                             _title = "%s|%s" % (T("Date & Time"),
-                                                                 T("Date and time this report relates to."),
-                                                                 ),
-                                             )
-                    table.patients.comment = DIV(_class = "tooltip",
-                                                 _title = "%s|%s" % (T("Patients"),
-                                                                     T("Number of in-patients at the time of reporting."),
-                                                                     ),
-                                                 )
-                    table.admissions24.comment = DIV(_class = "tooltip",
-                                                     _title = "%s|%s" % (T("Admissions/24hrs"),
-                                                                         T("Number of newly admitted patients during the past 24 hours."),
-                                                                         ),
-                                                     )
-
-                    table.discharges24.comment = DIV(_class = "tooltip",
-                                                     _title = "%s|%s" % (T("Discharges/24hrs"),
-                                                                         T("Number of discharged patients during the past 24 hours."),
-                                                                         ),
-                                                     )
-                    table.deaths24.comment = DIV(_class = "tooltip",
-                                                 _title = "%s|%s" % (T("Deaths/24hrs"),
-                                                                     T("Number of deaths during the past 24 hours."),
-                                                                     ),
-                                                 )
-
-                elif cname == "image":
-                    table = s3db.doc_image
-                    table.location_id.readable = table.location_id.writable = False
-                    table.organisation_id.readable = table.organisation_id.writable = False
-                    table.person_id.readable = table.person_id.writable = False
-
-                elif cname == "ctc":
-                    table = db.med_ctc
-                    table.ctc.comment = DIV(_class = "tooltip",
-                                            _title = "%s|%s" % (T("Cholera Treatment Center"),
-                                                                T("Does this facility provide a cholera treatment center?"),
-                                                                ),
-                                            )
-                    table.number_of_patients.comment = DIV(_class = "tooltip",
-                                                           _title = "%s|%s" % (T("Current number of patients"),
-                                                                               T("How many patients with the disease are currently hospitalized at this facility?"),
-                                                                               ),
-                                                           )
-                    table.cases_24.comment = DIV(_class = "tooltip",
-                                                 _title = "%s|%s" % (T("New cases in the past 24h"),
-                                                                     T("How many new cases have been admitted to this facility in the past 24h?"),
-                                                                     ),
-                                                 )
-                    table.deaths_24.comment = DIV(_class = "tooltip",
-                                                  _title = "%s|%s" % (T("Deaths in the past 24h"),
-                                                                      T("How many of the patients with the disease died in the past 24h at this facility?"),
-                                                                      ),
-                                                  )
-                    table.icaths_available.comment = DIV(_class = "tooltip",
-                                                         _title = "%s|%s" % (T("Infusion catheters available"),
-                                                                             T("Specify the number of available sets"),
-                                                                             ),
-                                                         )
-
-                    table.icaths_needed_24.comment = DIV(_class = "tooltip",
-                                                         _title = "%s|%s" % (T("Infusion catheters need per 24h"),
-                                                                             T("Specify the number of sets needed per 24h"),
-                                                                             ),
-                                                         )
-
-                    table.infusions_available.comment = DIV(_class = "tooltip",
-                                                            _title = "%s|%s" % (T("Infusions available"),
-                                                                                T("Specify the number of available units (litres) of Ringer-Lactate or equivalent solutions"),
-                                                                                ),
-                                                            )
-                    table.infusions_needed_24.comment = DIV(_class = "tooltip",
-                                                            _title = "%s|%s" % (T("Infusions needed per 24h"),
-                                                                                T("Specify the number of units (litres) of Ringer-Lactate or equivalent solutions needed per 24h"),
-                                                                                ),
-                                                            )
-                    table.antibiotics_available.comment = DIV(_class = "tooltip",
-                                                              _title = "%s|%s" % (T("Antibiotics available"),
-                                                                                  T("Specify the number of available units (adult doses)"),
-                                                                                  ),
-                                                              )
-                    table.antibiotics_needed_24.comment = DIV(_class = "tooltip",
-                                                              _title = "%s|%s" % (T("Antibiotics needed per 24h"),
-                                                                                  T("Specify the number of units (adult doses) needed per 24h"),
-                                                                                  ),
-                                                              )
-                    table.problem_types.comment = DIV(_class = "tooltip",
-                                                      _title = "%s|%s" % (T("Current problems, categories"),
-                                                                          T("Select all that apply"),
-                                                                          ),
-                                                      )
-                    table.problem_details.comment = DIV(_class = "tooltip",
-                                                        _title = "%s|%s" % (T("Current problems, details"),
-                                                                            T("Please specify any problems and obstacles with the proper handling of the disease, in detail (in numbers, where appropriate). You may also add suggestions the situation could be improved."),
-                                                                            ),
-                                                        )
+                # Configure tooltips and behaviors for specific components
+                configure_component_tooltips(r.component_name, r.table)
             else:
-                # No Component
-                table = r.table
-
-                if settings.get_med_have():
-                    # HAVE compliance
-                    table.town.label = T("Town")
-
-                    components_get = s3db.resource("med_hospital").components.get
-
-                    # UID assigned by Local Government
-                    gov_uuid = components_get("gov_uuid")
-                    f = gov_uuid.table.value
-                    f.requires = IS_EMPTY_OR([IS_LENGTH(128),
-                                              IS_NOT_ONE_OF(db, "org_site_tag.value"),
-                                              ])
-                    f.comment = DIV(_class = "tooltip",
-                                    _title = "%s|%s" % (T("Government UID"),
-                                                        T("The Unique Identifier (UUID) as assigned to this facility by the government."),
-                                                        ),
-                                    )
-
-                from s3 import S3LocationFilter, S3OptionsFilter, S3RangeFilter, S3TextFilter
-                stable = s3db.med_hospital_status
-                filter_widgets = [
-                        S3TextFilter(["name",
-                                      "code",
-                                      "comments",
-                                      "organisation_id$name",
-                                      "organisation_id$acronym",
-                                      "location_id$name",
-                                      "location_id$L1",
-                                      "location_id$L2",
-                                      ],
-                                     label = T("Name"),
-                                     _class = "filter-search",
-                                     ),
-                        S3OptionsFilter("facility_type",
-                                        label = T("Type"),
-                                        #hidden = True,
-                                        ),
-                        S3LocationFilter("location_id",
-                                         label = T("Location"),
-                                         levels = ("L0", "L1", "L2"),
-                                         #hidden = True,
-                                         ),
-                        S3OptionsFilter("status.facility_status",
-                                        label = T("Status"),
-                                        options = stable.facility_status.represent.options,
-                                        #represent = "%(name)s",
-                                        #hidden = True,
-                                        ),
-                        S3OptionsFilter("status.power_supply_type",
-                                        label = T("Power"),
-                                        options = stable.power_supply_type.represent.options,
-                                        #represent = "%(name)s",
-                                        #hidden = True,
-                                        ),
-                        S3OptionsFilter("bed_capacity.bed_type",
-                                        label = T("Bed Type"),
-                                        options = s3db.med_bed_capacity.bed_type.represent.options,
-                                        #represent = "%(name)s",
-                                        #hidden = True,
-                                        ),
-                        S3RangeFilter("total_beds",
-                                      label = T("Total Beds"),
-                                      #represent = "%(name)s",
-                                      #hidden = True,
-                                      ),
-                        ]
-
-                s3db.configure("med_hospital",
-                               filter_widgets = filter_widgets,
-                               )
-
-                s3.formats["have"] = r.url() # .have added by JS
-                # Add comments
-                table.total_beds.comment = DIV(_class = "tooltip",
-                                               _title = "%s|%s" % (T("Total Beds"),
-                                                                   T("Total number of beds in this facility. Automatically updated from daily reports."),
-                                                                   ),
-                                               )
-                table.available_beds.comment = DIV(_class = "tooltip",
-                                                   _title = "%s|%s" % (T("Available Beds"),
-                                                                       T("Number of vacant/available beds in this facility. Automatically updated from daily reports."),
-                                                                       ),
-                                                   )
+                # General configurations for the main hospital table
+                configure_hospital_table(r.table)
 
         elif r.representation == "plain":
-            # Duplicates info in the other fields
+            # Hide redundant location information in plain view
             r.table.location_id.readable = False
 
         return True
     s3.prep = prep
 
     from s3db.med import med_hospital_rheader
-    return s3_rest_controller(rheader = med_hospital_rheader)
+    return s3_rest_controller(rheader=med_hospital_rheader)
+
+# =============================================================================
+
+def configure_component_tooltips(component_name, table):
+    """
+    Configures tooltips and table settings for specific hospital components.
+    """
+    if component_name == "status":
+        configure_status_tooltips(table)
+    elif component_name == "bed_capacity":
+        configure_bed_capacity_tooltips(table)
+    elif component_name == "activity":
+        configure_activity_tooltips(table)
+    elif component_name == "image":
+        disable_unnecessary_fields(table)
+    elif component_name == "ctc":
+        configure_ctc_tooltips(table)
+        
+# =============================================================================
+
+def configure_status_tooltips(table):
+    """
+    Adds detailed tooltips for the hospital status component fields.
+    """
+    fields_tooltips = {
+        "facility_status": ("Facility Status", "Status of the facility."),
+        "facility_operations": ("Facility Operations", "Overall status of the facility operations."),
+        "clinical_status": ("Clinical Status", "Status of the clinical departments."),
+        "clinical_operations": ("Clinical Operations", "Overall status of the clinical operations."),
+        "ems_status": ("Emergency Medical Services", "Status of operations/availability of emergency medical services at this facility."),
+        "ems_reason": ("EMS Status Reasons", "Report the contributing factors for the current EMS status."),
+        "or_status": ("OR Status", "Status of the operating rooms of this facility."),
+        "or_reason": ("OR Status Reason", "Report the contributing factors for the current OR status."),
+        "morgue_status": ("Morgue Status", "Status of morgue capacity."),
+        "morgue_units": ("Morgue Units Available", "Number of vacant/available units to which victims can be transported immediately."),
+        "security_status": ("Security Status", "Status of security procedures/access restrictions for the facility."),
+        "staffing": ("Staffing Level", "Current staffing level at the facility."),
+        "access_status": ("Road Conditions", "Describe the condition of the roads from/to the facility."),
+    }
+    apply_tooltips(table, fields_tooltips)
+    
+# =============================================================================
+
+def configure_bed_capacity_tooltips(table):
+    """
+    Adds tooltips for the bed capacity component fields.
+    """
+    fields_tooltips = {
+        "bed_type": ("Bed Type", "Specify the bed type of this unit."),
+        "beds_baseline": ("Baseline Number of Beds", "Baseline number of beds of that type in this unit."),
+        "beds_available": ("Available Beds", "Number of available/vacant beds of that type in this unit at the time of reporting."),
+        "beds_add24": ("Additional Beds / 24hrs", "Number of additional beds of that type expected to become available in this unit within the next 24 hours."),
+    }
+    apply_tooltips(table, fields_tooltips)
+
+# =============================================================================
+
+def configure_activity_tooltips(table):
+    """
+    Adds tooltips for the hospital activity component fields.
+    """
+    fields_tooltips = {
+        "date": ("Date & Time", "Date and time this report relates to."),
+        "patients": ("Patients", "Number of in-patients at the time of reporting."),
+        "admissions24": ("Admissions/24hrs", "Number of newly admitted patients during the past 24 hours."),
+        "discharges24": ("Discharges/24hrs", "Number of discharged patients during the past 24 hours."),
+        "deaths24": ("Deaths/24hrs", "Number of deaths during the past 24 hours."),
+    }
+    apply_tooltips(table, fields_tooltips)
+
+# =============================================================================
+
+def configure_ctc_tooltips(table):
+    """
+    Adds tooltips for the Cholera Treatment Center (CTC) component fields.
+    """
+    fields_tooltips = {
+        "ctc": ("Cholera Treatment Center", "Does this facility provide a cholera treatment center?"),
+        "number_of_patients": ("Current number of patients", "How many patients with the disease are currently hospitalized at this facility?"),
+        "cases_24": ("New cases in the past 24h", "How many new cases have been admitted to this facility in the past 24h?"),
+        "deaths_24": ("Deaths in the past 24h", "How many of the patients with the disease died in the past 24h at this facility?"),
+        "icaths_available": ("Infusion catheters available", "Specify the number of available sets."),
+        "icaths_needed_24": ("Infusion catheters need per 24h", "Specify the number of sets needed per 24h."),
+        "infusions_available": ("Infusions available", "Specify the number of available units (litres) of Ringer-Lactate or equivalent solutions."),
+        "infusions_needed_24": ("Infusions needed per 24h", "Specify the number of units (litres) of Ringer-Lactate or equivalent solutions needed per 24h."),
+        "antibiotics_available": ("Antibiotics available", "Specify the number of available units (adult doses)."),
+        "antibiotics_needed_24": ("Antibiotics needed per 24h", "Specify the number of units (adult doses) needed per 24h."),
+        "problem_types": ("Current problems, categories", "Select all that apply."),
+        "problem_details": ("Current problems, details", "Please specify any problems and obstacles with the proper handling of the disease in detail (in numbers, where appropriate)."),
+    }
+    apply_tooltips(table, fields_tooltips)
+
+# =============================================================================
+
+def apply_tooltips(table, fields_tooltips):
+    """
+    Applies tooltips to the fields of a table.
+    """
+    for field, (label, tooltip) in fields_tooltips.items():
+        setattr(table[field], "comment", DIV(_class="tooltip", _title=f"{label}|{tooltip}"))
+
+# =============================================================================
+
+def disable_unnecessary_fields(table):
+    """
+    Disables fields irrelevant for the hospital image component.
+    """
+    for field in ["location_id", "organisation_id", "person_id"]:
+        setattr(table[field], "readable", False)
+        setattr(table[field], "writable", False)
 
 # =============================================================================
 def pharmacy():
     """
-        RESTful CRUD controller for Pharmacies
+    RESTful CRUD controller for Pharmacies.
     """
-
-    # Pre-processor
     def prep(r):
-        # Function to call for all Site Instance Types
         from s3db.org import org_site_prep
         org_site_prep(r)
-
         return True
     s3.prep = prep
-
     return s3_rest_controller()
 
 # =============================================================================

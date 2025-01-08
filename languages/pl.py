@@ -386,6 +386,7 @@
 'Approved By': 'Zatwierdzony przez',
 'Approver': 'Zatwierdzający',
 'Arabic': 'Arabic',
+'Malay':'Melayu',
 'ArcGIS REST Layer': 'Warstwa ArcGIS REST',
 'Archive': 'Archiwum',
 'Archive created': 'Archiwum utworzone',

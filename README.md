@@ -192,6 +192,7 @@ Many translations are already available for Sahana Eden, although they may not b
 - Tagalog
 - Tetum
 - Vietnamese
+- Malay
 
 #### Updating an Existing Translation
 If you need to update an existing translation, either because it is incomplete or to add customized strings specific to your installation, then you need to update a text file in the languages folder (e.g. languages/de.py for the German translation). This file contains a Python dictionary to map the original US English strings to their translated counterparts.

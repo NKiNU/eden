@@ -7211,6 +7211,7 @@ def org_organisation_controller():
             s3db.configure(r.tablename,
                            list_fields = list_fields + ["pe_id"],
                            )
+            
 
         elif r.representation == "xls" and r.component_name == "branch":
             # Improve XLS export of Branches
