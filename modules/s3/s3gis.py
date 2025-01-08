@@ -7257,8 +7257,8 @@ class MAP(DIV):
                     (ctable.uuid == "SITE_DEFAULT") & \
                     (ltable.base == True) & \
                     (ltable.enabled == True)
-            layers = db(query).select(limitby = (0, 1),
-                                      *fields)
+            layers = db(query).select(*fields, limitby=(0, 1))
+
             if not layers:
                 # Just show EmptyLayer
                 layer_types = [LayerEmpty]

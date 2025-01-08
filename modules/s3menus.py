@@ -33,6 +33,10 @@ __all__ = ("S3MainMenu",
 
 import re
 
+# The above code is importing the `current` and `URL` modules from the `gluon` package in Python. The
+# `current` module is typically used in web development frameworks like web2py to access request,
+# response, session, and other web-related information. The `URL` module is used to generate URLs for
+# links and redirects in web applications.
 from gluon import current, URL
 from gluon.storage import Storage
 

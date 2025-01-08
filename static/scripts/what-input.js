@@ -4,6 +4,24 @@
  * @link https://github.com/ten1seven/what-input
  * @license MIT
  */
+
+document.addEventListener("DOMContentLoaded", function () {
+	const hamburgerBtn = document.getElementById("hamburger-btn");
+	const navbarMenu = document.getElementById("navbar-menu");
+  
+	// Toggle menu visibility on click
+	hamburgerBtn.addEventListener("click", () => {
+	  navbarMenu.classList.toggle("show");
+	});
+  
+	// Optional: Close the menu when a link is clicked
+	const links = navbarMenu.querySelectorAll("a");
+	links.forEach((link) =>
+	  link.addEventListener("click", () => navbarMenu.classList.remove("show"))
+	);
+  });
+
+  
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
