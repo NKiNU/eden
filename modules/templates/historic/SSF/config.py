@@ -77,6 +77,8 @@ def config(settings):
        ("vi", "Tiếng Việt"),
        ("zh-cn", "中文 (简体)"),
        ("zh-tw", "中文 (繁體)"),
+       ("ms", "Malay"),
+       
     ])
     # Default language for Language Toolbar (& GIS Locations in future)
     settings.L10n.default_language = "en"

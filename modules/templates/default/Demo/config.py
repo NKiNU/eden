@@ -77,8 +77,10 @@ def config(settings):
         ("ua", "Ukrainian"),
         ("ur", "Urdu"), # Pakistan
         ("vi", "Vietnamese"),
+        ("ms", "Malay"),
         ("zh-cn", "Chinese (Simplified)"), # Mainland China
         ("zh-tw", "Chinese (Taiwan)"),
+        
     ])
 
     # AAA Settings

@@ -2939,7 +2939,7 @@ class IS_ISO639_2_LANGUAGE_CODE(IS_IN_SET):
                 #("mar", "Marathi"),
                 ("mr", "Marathi"),
                 ("mas", "Masai"),
-                #("may", "Malay"),
+                ("may", "Malay"),
                 ("ms", "Malay"),
                 ("mdf", "Moksha"),
                 ("mdr", "Mandar"),
@@ -3244,9 +3244,9 @@ class IS_ISO639_2_LANGUAGE_CODE(IS_IN_SET):
 
         return list(set(lang)) # Remove duplicates
 
-# =============================================================================
-<<<<<<< HEAD
-=======
+# # =============================================================================
+# <<<<<<< HEAD
+# =======
 
 VALID_IBAN_COUNTRIES = {
     "AD", "AE", "AL", "AT", "AZ", "BA", "BE", "BG", "BH",
@@ -3261,7 +3261,7 @@ VALID_IBAN_COUNTRIES = {
 
 IBAN_PATTERN = re.compile(r"^([A-Z]{2})(\d{2})([A-Z0-9]{1,30})$")
 
->>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
+# >>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
 class IS_IBAN(Validator):
     """ Validate IBAN International Bank Account Numbers (ISO 13616:2007) """
 
@@ -3325,8 +3325,8 @@ class IS_IBAN(Validator):
         if not value:
             return "-"
         return " ".join(re.findall(r"\w{1,4}", value.strip().replace(" ", "").upper()))
-<<<<<<< HEAD
-=======
+# <<<<<<< HEAD
+# =======
 
 
 def get_supported_languages():
@@ -3372,6 +3372,6 @@ def is_valid_language(language_code):
     """
     supported_languages = [lang[0] for lang in get_supported_languages()]
     return language_code in supported_languages
->>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
+# >>>>>>> 6360e9f77273b5f6c992395300ce948c4b96e59a
 
 # END =========================================================================
