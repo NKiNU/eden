@@ -37,7 +37,7 @@ import base64
 import hashlib
 import hmac
 import json
-import urllib
+from urllib.parse import urlencode
 
 try:
     import requests
@@ -54,7 +54,7 @@ except ImportError:
 # https://github.com/pythonforfacebook/facebook-sdk
 __version__ = "1.0.0-alpha"
 
-class GraphAPI(object):
+class GraphAPI():
     """A client for the Facebook Graph API.
 
     See http://developers.facebook.com/docs/api for complete
@@ -87,9 +87,9 @@ class GraphAPI(object):
         self.access_token = access_token
         self.timeout = timeout
 
-    def get_object(self, id, **args):
+    def get_object(self, object_id, **args):
         """Fetches the given object from the graph."""
-        return self.request(id, args)
+        return self.request(object_id, args)
 
     def get_objects(self, ids, **args):
         """Fetches all of the given object from the graph.
@@ -129,9 +129,9 @@ class GraphAPI(object):
 
         """
         assert self.access_token, "Write operations require an access token"
-        return self.request("%s/%s" % (parent_object, connection_name),
-                            post_args=data,
-                            method="POST")
+        return self.request(f"{parent_object}/{connection_name}",
+                    post_args=data,
+                    method="POST")
 
     def put_wall_post(self, message, attachment={}, profile_id="me"):
         """Writes a wall post to the given profile's wall.
@@ -166,7 +166,7 @@ class GraphAPI(object):
 
     def delete_request(self, user_id, request_id):
         """Deletes the Request with the given ID for the given user."""
-        self.request("%s_%s" % (request_id, user_id), method="DELETE")
+        self.request(f"{request_id}_{user_id}", method="DELETE")
 
     def put_photo(self, image, message=None, album_id=None, **kwargs):
         """Uploads an image using multipart/form-data.
@@ -203,14 +203,15 @@ class GraphAPI(object):
 
         try:
             response = requests.request(method or "GET",
-                                        "https://graph.facebook.com/%s" % path,
-                                        timeout=self.timeout,
-                                        params=args,
-                                        data=post_args,
-                                        files=files)
+                            f"https://graph.facebook.com/{path}",
+                            timeout=self.timeout,
+                            params=args,
+                            data=post_args,
+                            files=files)
+
         except requests.HTTPError as e:
             response = json.loads(e.read())
-            raise GraphAPIError(response)
+            raise GraphAPIError(response) from e
 
         headers = response.headers
         if 'json' in headers['content-type']:
@@ -227,12 +228,12 @@ class GraphAPI(object):
                 if "expires" in query_str:
                     result["expires"] = query_str["expires"][0]
             else:
-                raise GraphAPIError(response.json())
+                raise GraphAPIError(response.json()) from e
         else:
-            raise GraphAPIError('Maintype was not text, image, or querystring')
+            raise GraphAPIError('Maintype was not text, image, or querystring') from e
 
         if result and isinstance(result, dict) and result.get("error"):
-            raise GraphAPIError(result)
+            raise GraphAPIError(result) from e
         return result
 
     def fql(self, query):
@@ -327,7 +328,7 @@ def get_user_from_cookie(cookies, app_id, app_secret):
     http://developers.facebook.com/docs/authentication/.
 
     """
-    cookie = cookies.get("fbsr_%s" % app_id, None)
+    cookie = cookies.get(f"fbsr_{app_id}", None)
     if not cookie:
         return None
     parsed_request = parse_signed_request(cookie, app_secret)
@@ -385,12 +386,23 @@ def parse_signed_request(signed_request, app_secret):
 
 
 def auth_url(app_id, canvas_url, perms=None, **kwargs):
+    """Generate an authentication URL for the Facebook Graph API.
+
+    Args:
+        app_id (str): The Facebook application ID.
+        canvas_url (str): The redirect URI for the application.
+        perms (list, optional): List of permissions to request.
+        **kwargs: Additional query parameters.
+
+    Returns:
+        str: The generated authentication URL.
+    """
     url = "https://www.facebook.com/dialog/oauth?"
     kvps = {'client_id': app_id, 'redirect_uri': canvas_url}
     if perms:
         kvps['scope'] = ",".join(perms)
     kvps.update(kwargs)
-    return url + urllib.urlencode(kvps)
+    return url + urlencode(kvps)
 
 
 def get_access_token_from_code(code, redirect_uri, app_id, app_secret):
